@@ -1,5 +1,3 @@
-// script.js file
-
 function domReady(fn) {
     if (
         document.readyState === "complete" ||
@@ -13,11 +11,27 @@ function domReady(fn) {
 
 domReady(function () {
 
-    // If found you qr code
+    // If QR code is successfully scanned
     function onScanSuccess(decodeText, decodeResult) {
-        alert("You Qr is : " + decodeText, decodeResult);
+        // Check if the decoded text is a valid URL
+        if (isValidUrl(decodeText)) {
+            window.location.href = decodeText;  // Redirect to the URL
+        } else {
+            alert("Scanned QR code is not a valid URL: " + decodeText);
+        }
     }
 
+    // Function to validate if the scanned text is a valid URL
+    function isValidUrl(string) {
+        try {
+            new URL(string);
+            return true;
+        } catch (_) {
+            return false;
+        }
+    }
+
+    // Initialize QR scanner
     let htmlscanner = new Html5QrcodeScanner(
         "my-qr-reader",
         { fps: 10, qrbos: 250 }
